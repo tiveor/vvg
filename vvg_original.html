@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="VVG a Random Painter Original Idea" />
+    <meta name="keywords" content="HTML, CSS, JavaScript" />
+    <meta name="author" content="Alvaro Orellana" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VVG a Random Painter</title>
+  </head>
+  <body
+    style="text-align: center; color: #fff; padding: 10px; background: #212121"
+  >
+    <canvas id="myCanvas" width="1356" height="915" style="background: #fff"
+      >Your browser does not support the HTML5 canvas tag.</canvas
+    >
+    <script>
+      const WIDTH = 1356; // window.innerWidth; //  1280;
+      const HEIGHT = 915; // window.innerHeight; // 845;
+
+      const INNER_WIDTH = 1280;
+      const INNER_HEIGHT = 845;
+
+      const BORDER_LEFT = 38;
+      const BORDER_RIGHT = 38;
+      const BORDER_UP = 35;
+      const BORDER_DOWN = 35;
+
+      const MIN_LINES = 800;
+      const MAX_LINES = 1000;
+      const MIN_POLYGONS = 100;
+      const MAX_POLYGONS = 5000;
+      const MIN_BEZZIERS = 10000;
+      const MAX_BEZZIERS = 5000;
+      const MIN_LINE_WIDTH = 1;
+      const MAX_LINE_WIDTH = 3;
+      const MIN_SIZE_POLYGON = 10;
+      const MAX_SIZE_POLYGON = 20;
+      const DRAW_MAX_SIZE = 25;
+      const BEZZIER_MIN_HEIGTH = 25;
+      const BEZZIER_MAX_HEIGTH = 50;
+      const BEZZIER_MIN_WIDTH = 25;
+      const BEZZIER_MAX_WIDTH = 50;
+      const MIN_BACKGROUNDS = 1;
+      const MAX_BACKGROUNDS = 3;
+      const DOT_SIZE = 1;
+      const MIN_DOTS = 100000;
+      const MAX_DOTS = 1000000;
+      const IMAGE1_WIDTH = 270;
+      const IMAGE1_HEIGHT = 443;
+      const IMAGE2_WIDTH = 100;
+      const IMAGE2_HEIGHT = 100;
+      const MIN_IMAGES = 100;
+      const MAX_IMAGES = 500;
+
+      const MIN_TEXTS = 5000;
+      const MAX_TEXTS = 10000;
+
+      const MIN_TEXT_SIZE = 6;
+      const MAX_TEXT_SIZE = 15;
+
+      const DRAW_ELLIPSE_MIN_SIZE = 10;
+      const DRAW_ELLIPSE_MAX_SIZE = 25;
+      const MIN_ELLIPSES = 100;
+      const MAX_ELLIPSES = 500;
+      const COLORS_PALLETE_1 = [
+        "#AA8076",
+        "#9D7A58",
+        "#E5E3E1",
+        "#846D67",
+        "#AB9378",
+        "#B09D98",
+        "#A68E55",
+        "#9F6555",
+        "#C2BB8C",
+        "#AA9F43",
+      ];
+
+      const COLORS_PALLETE_2 = [
+        "#e69373",
+        "#805240",
+        "#e6d5cf",
+        "#bf5830",
+        "#77d36a",
+        "#488040",
+        "#d2e6cf",
+        "#43bf30",
+        "#557aaa",
+        "#405c80",
+        "#cfd9e6",
+        "#306ebf",
+      ];
+
+      const COLORS_PALLETE_FABER_CASTELL = [
+        "#f0d20b",
+        "#fe7102",
+        "#cc0303",
+        "#ec7c48",
+        "#983e7a",
+        "#39b0ea",
+        "#014e90",
+        "#014e90",
+        "#0d9715",
+        "#8a3606",
+        "#1a1b11",
+        "#c2ac50",
+      ];
+
+      const COLORS_PALLETE_BOLIVIA = [
+        "#DA291C",
+        "#F4E400",
+        "#007A33",
+        "#FFFFFF",
+        "#CCCCCC",
+      ];
+
+      const COLORS_PALLETE_WHIPALA = [
+        "#FFFFFF",
+        "#007934",
+        "#0032a0",
+        "#753bbd",
+        "#DA291C",
+        "#ff6720",
+        "#F9E300",
+      ];
+
+      const COLORS_PALLETE = COLORS_PALLETE_WHIPALA;
+
+      const CODE_STRINGS = [
+        "Java",
+        "Ruby",
+        "JavaScript",
+        "Kotlin",
+        "Swift",
+        "C#",
+        "Pascal",
+        "PHP",
+        "Objetive-C",
+        "Python",
+        "Dart",
+        "TypeScript",
+        "Go",
+        "C",
+        "C++",
+        "Perl",
+        "R",
+        "Scala",
+        "Groovy",
+        "JRuby",
+        "Haskell",
+        "Assembler",
+        "RPN",
+      ];
+
+      const random = (min, max) => {
+        //return parseInt(Math.random() * (max - min) + min);
+        return Math.random() * (max - min) + min;
+      };
+
+      const randomBool = () => {
+        return Math.random() >= 0.5;
+      };
+
+      const randInsideX = (refX) => {
+        if (refX) {
+          const side = randomBool();
+          return random(refX, refX + (side ? DRAW_MAX_SIZE : -DRAW_MAX_SIZE));
+        } else {
+          return random(0, WIDTH);
+        }
+      };
+
+      const randInsideY = (refY) => {
+        if (refY) {
+          const side = randomBool();
+          return random(refY, refY + (side ? DRAW_MAX_SIZE : -DRAW_MAX_SIZE));
+        } else {
+          return random(0, HEIGHT);
+        }
+      };
+
+      const randInsideBoxX = (maxWidth) => {
+        return random(0, WIDTH - maxWidth);
+      };
+
+      const randInsideBoxY = (maxHeight) => {
+        return random(0, HEIGHT - maxHeight);
+      };
+
+      const randAttibuteColor = () => {
+        return random(0, 255);
+      };
+
+      const randomAngle = () => {
+        //const res = parseInt(random(0, 360)) * (Math.PI / 180);
+        const res = 180 * (Math.PI / 180);
+        return res;
+      };
+
+      const randColor = () => {
+        const r = randAttibuteColor();
+        const g = randAttibuteColor();
+        const b = randAttibuteColor();
+        //const a = random(0.95, 1);
+        //const colorIndex = parseInt(
+        // random(0, COLORS_PALLETE.length)
+        //);
+        //return COLORS_PALLETE[colorIndex];
+        return `rgb(${r},${g},${b})`;
+        //return `rgba(${r},${g},${b},${a})`;
+      };
+
+      const randText = () => {
+        const textIndex = parseInt(random(0, CODE_STRINGS.length - 1));
+        return CODE_STRINGS[textIndex];
+      };
+
+      const randTextSize = () => {
+        return parseInt(random(MIN_TEXT_SIZE, MAX_TEXT_SIZE)) + "px";
+      };
+
+      const drawLine = (ctx) => {
+        ctx.beginPath();
+        let initialX = randInsideX();
+        let initialY = randInsideY();
+        ctx.moveTo(initialX, initialY);
+        ctx.lineTo(randInsideX(initialX), randInsideY(initialY));
+        ctx.lineWidth = random(MIN_LINE_WIDTH, MAX_LINE_WIDTH);
+        ctx.strokeStyle = randColor();
+        ctx.stroke();
+      };
+
+      const drawLines = (ctx) => {
+        for (var i = 0; i < random(MIN_LINES, MAX_LINES); i++) {
+          drawLine(ctx);
+        }
+      };
+
+      const drawBezierOriginal = (ctx) => {
+        ctx.beginPath();
+        let initialX = randInsideX();
+        let initialY = randInsideY();
+        ctx.moveTo(initialX, initialY);
+        let max_height = random(BEZZIER_MIN_HEIGTH, BEZZIER_MAX_HEIGTH);
+        let max_width = random(BEZZIER_MIN_WIDTH, BEZZIER_MAX_WIDTH);
+        max_height = randomBool ? max_height : -max_height;
+        max_width = randomBool ? max_width : -max_width;
+
+        ctx.bezierCurveTo(
+          initialX,
+          initialY + max_height,
+          initialX + max_width,
+          initialY + max_height,
+          initialX + max_width,
+          initialY
+        );
+        ctx.fillStyle = randColor();
+        ctx.closePath();
+        ctx.fill();
+      };
+
+      const drawBezier = (ctx) => {
+        ctx.beginPath();
+        let x1 = randInsideX();
+        let y1 = randInsideY();
+        ctx.moveTo(x1, y1);
+        let x2 = randInsideX(x1);
+        let y2 = randInsideY(y1);
+        let x3 = randInsideX(x2);
+        let y3 = randInsideY(y2);
+        let x4 = randInsideX(x3);
+        let y4 = randInsideY(y3);
+        ctx.bezierCurveTo(x2, y2, x3, y3, x4, y4);
+        ctx.fillStyle = randColor();
+        ctx.closePath();
+        ctx.fill();
+      };
+
+      const drawBeziers = (ctx) => {
+        for (var i = 0; i < random(MIN_BEZZIERS, MAX_BEZZIERS); i++) {
+          drawBezier(ctx);
+        }
+      };
+
+      const drawPolygon = (ctx) => {
+        ctx.beginPath();
+        let initialX = randInsideX();
+        let initialY = randInsideY();
+        ctx.moveTo(initialX, initialY);
+        for (var i = 0; i < random(MIN_SIZE_POLYGON, MAX_SIZE_POLYGON); i++) {
+          ctx.lineTo(randInsideX(initialX), randInsideY(initialY));
+        }
+        ctx.fillStyle = randColor();
+        ctx.closePath();
+        ctx.fill();
+      };
+
+      const drawPolygons = (ctx) => {
+        for (var i = 0; i < random(MIN_POLYGONS, MAX_POLYGONS); i++) {
+          drawPolygon(ctx);
+        }
+      };
+
+      const drawBackground = (ctx) => {
+        ctx.beginPath();
+        let x1 = 0;
+        let y1 = randInsideY();
+        ctx.moveTo(x1, y1);
+        let x2 = 0;
+        let y2 = randInsideY();
+        ctx.lineTo(x2, y2);
+        let x3 = WIDTH;
+        let y3 = randInsideY();
+        ctx.lineTo(x3, y3);
+        let x4 = WIDTH;
+        let y4 = randInsideY();
+        ctx.lineTo(x4, y4);
+        ctx.fillStyle = randColor();
+        ctx.closePath();
+        ctx.fill();
+      };
+
+      const drawBackgrounds = (ctx) => {
+        ctx.fillStyle = randColor();
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+        for (var i = 0; i < random(MIN_BACKGROUNDS, MAX_BACKGROUNDS); i++) {
+          drawBackground(ctx);
+        }
+      };
+
+      const drawDot = (ctx) => {
+        ctx.fillStyle = randColor();
+        ctx.fillRect(randInsideX(), randInsideY(), DOT_SIZE, DOT_SIZE);
+      };
+
+      const drawDots = (ctx) => {
+        for (var i = 0; i < random(MIN_DOTS, MAX_DOTS); i++) {
+          drawDot(ctx);
+        }
+      };
+
+      const drawImage1 = (ctx) => {
+        var img = new Image();
+        img.onload = function () {
+          const x = randInsideBoxX(IMAGE1_WIDTH);
+          const y = randInsideBoxY(IMAGE1_HEIGHT);
+          //const axisX = (IMAGE1_WIDTH / 2);
+          //const axisY = (IMAGE1_WIDTH / 2);
+          //ctx.translate(axisX, axisY);
+          //ctx.rotate(randomAngle());
+          //ctx.translate(-axisX, -axisY);
+          ctx.drawImage(img, x, y);
+        };
+        img.src = "assets/pincel4.png";
+      };
+
+      const drawImage2 = (ctx) => {
+        var img = new Image();
+        img.onload = function () {
+          const x = randInsideBoxX(IMAGE2_WIDTH);
+          const y = randInsideBoxY(IMAGE2_HEIGHT);
+          ctx.drawImage(img, x, y);
+        };
+        img.src = "assets/star.svg";
+      };
+
+      const drawImages = (ctx) => {
+        for (var i = 0; i < random(MIN_IMAGES, MAX_IMAGES); i++) {
+          //drawImage1(ctx);
+          drawImage2(ctx);
+        }
+      };
+
+      const drawEllipse = (ctx) => {
+        ctx.fillStyle = randColor();
+        ctx.beginPath();
+        const size = random(DRAW_ELLIPSE_MIN_SIZE, DRAW_ELLIPSE_MAX_SIZE);
+        ctx.ellipse(
+          randInsideX(),
+          randInsideY(),
+          size,
+          size,
+          0,
+          0,
+          2 * Math.PI,
+          true
+        );
+        ctx.fill();
+      };
+
+      const drawPattern = (ctx) => {
+        var img = new Image();
+        img.src = "assets/pincel1.png";
+        img.onload = function () {
+          var ptrn = ctx.createPattern(img, "repeat");
+          ctx.fillStyle = ptrn;
+          ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        };
+      };
+
+      const drawEllipses = (ctx) => {
+        for (var i = 0; i < random(MIN_ELLIPSES, MAX_ELLIPSES); i++) {
+          drawEllipse(ctx);
+        }
+      };
+
+      const drawText = (ctx) => {
+        ctx.fillStyle = randColor();
+        ctx.font = randTextSize() + " Verdana";
+        const text = randText();
+        const x = randInsideX();
+        const y = randInsideY();
+        const angle = randomAngle();
+        ctx.fillText(text.toLowerCase(), x, y);
+      };
+
+      const drawTexts = (ctx) => {
+        for (var i = 0; i < random(MIN_TEXTS, MAX_TEXTS); i++) {
+          drawText(ctx);
+        }
+      };
+
+      const drawFrame = (ctx) => {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx.beginPath();
+        ctx.rect(BORDER_LEFT, BORDER_UP, INNER_WIDTH, INNER_HEIGHT);
+        drawAuthor(ctx);
+        ctx.clip();
+      };
+
+      const drawAuthor = (ctx) => {
+        ctx.font = "14px Helvetica";
+        ctx.direction = "rtl";
+        ctx.fillStyle = "#999999";
+        ctx.fillText(
+          "VVG a Random Painter - By Alvaro Orellana",
+          WIDTH - BORDER_RIGHT,
+          HEIGHT - 11
+        );
+      };
+
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      //ctx.filter = "blur(1px)";
+
+      drawFrame(ctx);
+      drawBackgrounds(ctx);
+      //drawPattern(ctx);
+      drawDots(ctx);
+      drawEllipses(ctx);
+      drawBeziers(ctx);
+      drawPolygons(ctx);
+      drawLines(ctx);
+      //drawTexts(ctx);
+      //drawImages(ctx);
+
+      function exportArt(e) {
+        var canvasElement = document.getElementById("myCanvas");
+        const MIME_TYPE = "image/png";
+        var imgURL = canvasElement.toDataURL(MIME_TYPE);
+        var dlLink = document.createElement("a");
+        dlLink.download = "art.png";
+        dlLink.href = imgURL;
+        dlLink.dataset.downloadurl = [
+          MIME_TYPE,
+          dlLink.download,
+          dlLink.href,
+        ].join(":");
+
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+      }
+    </script>
+    <br /><br />
+    <a href="#" onclick="exportArt()">Download</a>
+  </body>
+</html>
