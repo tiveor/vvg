@@ -1,7 +1,6 @@
-# vvg
 ## VVG a Random Painter
 
-## Usage
+### Usage
 ```
 - Just open the vvg_original.html in a Browser (with canvas support)
 - A new fresh painting will be available for you
