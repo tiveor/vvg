@@ -12,4 +12,9 @@ class Label {
     ctx.font = this.font;
     ctx.fillText(this.text, this.x, this.y);
   }
+
+  //TODO: drawn a text inside a rectangle resizing it to the width and height
+  //https://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas
 }
+
+module.exports = Label;

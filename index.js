@@ -1,9 +1,30 @@
+const backgroundType = require("./src/extended/background.js");
+const { palleteType } = require("./src/enums/pallettype.js");
+
+const Frame = require("./src/extended/frame.js");
+const Background = require("./src/extended/background.js");
+const Label = require("./src/extended/label.js");
+const Star = require("./src/extended/star.js");
+const Tree = require("./src/extended/tree.js");
+
+const Colorizer = require("./src/utils/colorizer.js");
+const Randomizer = require("./src/utils/randomizer.js");
+const Gen = require("./src/utils/gen.js");
+
+const Quadrilateral = require("./src/shapes/quadrilateral.js");
+const Bezzier = require("./src/shapes/bezzier.js");
+const Polygon = require("./src/shapes/polygon.js");
+const Dot = require("./src/shapes/dot.js");
+const Line = require("./src/shapes/line.js");
+const Ellipse = require("./src/shapes/ellipse.js");
+const VImage = require("./src/shapes/vimage.js");
+
 class vvg {
-  constructor(context, canvas, width, height) {
-    this.ctx = context;
+  constructor(canvas) {
+    this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
-    this.width = width;
-    this.height = height;
+    this.width = canvas.width;
+    this.height = canvas.height;
   }
 
   drawFrame({
@@ -117,7 +138,7 @@ class vvg {
     image.draw(this.ctx);
   }
 
-  drawTree({ trunks, width, height, color, shadowColor }) {
+  drawTree({ trunks, width, height, color, shadowColor }, finished) {
     const trunk = new Tree(trunks, width, height, color, shadowColor);
     const that = this;
 
@@ -150,6 +171,7 @@ class vvg {
           });
         }
       }
+      finished();
     });
   }
 
@@ -166,6 +188,14 @@ class vvg {
         src: "assets/grass.svg",
       });
     });
+  }
+
+  saveToFile(fileNamePath) {
+    const fs = require("fs");
+    const out = fs.createWriteStream(`${__dirname}/${fileNamePath}`);
+    const stream = this.canvas.createPNGStream();
+    stream.pipe(out);
+    out.on("finish", () => console.log("The PNG file was created."));
   }
 
   example1() {
@@ -309,7 +339,7 @@ class vvg {
     });
   }
 
-  example3() {
+  example3(finished) {
     this.drawFrame({
       width: this.width,
       height: this.height,
@@ -322,13 +352,16 @@ class vvg {
       author: "VVG a Random Painter - Jacaranda",
     });
 
-    this.drawTree({
-      trunks: 5,
-      width: this.width - 18 - 18,
-      height: this.height - 18 - 63,
-      color: "#8e4d16",
-      shadowColor: "#663002",
-    });
+    this.drawTree(
+      {
+        trunks: 5,
+        width: this.width - 18 - 18,
+        height: this.height - 18 - 63,
+        color: "#8e4d16",
+        shadowColor: "#663002",
+      },
+      finished
+    );
 
     this.drawGrass();
   }
@@ -450,3 +483,5 @@ class vvg {
     });
   }
 }
+
+module.exports = vvg;

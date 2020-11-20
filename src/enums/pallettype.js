@@ -1,0 +1,9 @@
+const palleteType = {
+  PALETTE_1: "PALETTE_1",
+  PALETTE_2: "PALETTE_2",
+  PALETTE_FABER: "PALETTE_FABER",
+  PALETTE_BOLIVIA: "PALETTE_BOLIVIA",
+  PALETTE_WHIPALA: "PALETTE_WHIPALA",
+};
+
+exports.palleteType = palleteType;

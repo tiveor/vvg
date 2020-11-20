@@ -5,10 +5,10 @@ canvas.height = 768;
 //canvas.width = container.clientWidth;
 //canvas.height = container.clientHeight;
 
-const context = canvas.getContext("2d");
-let painter = new vvg(context, canvas, canvas.width, canvas.height);
+let painter = new vvg(canvas);
 const example = Randomizer.randomInt(1, 5);
-switch (example) {
+painter.example4();
+/*switch (example) {
   case 1:
     painter.example1();
     break;
@@ -23,4 +23,4 @@ switch (example) {
     break;
   default:
     painter.example3();
-}
+}*/
