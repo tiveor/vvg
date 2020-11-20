@@ -35,7 +35,6 @@ class Colorizer {
     const g = Randomizer.randAttibuteColor();
     const b = Randomizer.randAttibuteColor();
     const color = `rgb(${r},${g},${b})`;
-    console.log(color);
     return color;
   };
 
@@ -44,7 +43,8 @@ class Colorizer {
     const g = Randomizer.randAttibuteColor();
     const b = Randomizer.randAttibuteColor();
     const a = Randomizer.random(0.75, 1);
-    return `rgba(${r},${g},${b},${a})`;
+    const color = `rgba(${r},${g},${b},${a})`;
+    return color;
   };
 }
 module.exports = Colorizer;

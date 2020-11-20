@@ -195,7 +195,9 @@ class vvg {
     const out = fs.createWriteStream(`${__dirname}/${fileNamePath}`);
     const stream = this.canvas.createPNGStream();
     stream.pipe(out);
-    out.on("finish", () => console.log("The PNG file was created."));
+    out.on("finish", () =>
+      console.log(`The ${fileNamePath} file was created.`)
+    );
   }
 
   example1() {

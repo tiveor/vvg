@@ -39,9 +39,7 @@ class Tree {
       if (frame < 300) {
         snakes.next(this.canvas);
         frame++;
-        console.log(frame);
       } else {
-        console.log("finished");
         that.finished();
         clearInterval(intervalHandle);
       }

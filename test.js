@@ -5,13 +5,13 @@ const canvas = createCanvas(1024, 768);
 const x = new vvg(canvas);
 
 /*
-//EXAMPLE1
+//EXAMPLE 1
 x.example1();
 x.saveToFile("temp/example1.png");
 */
 
 /*
-//EXAMPLE2
+//EXAMPLE 2
 x.example2();
 setTimeout(() => {
   x.saveToFile("temp/example2.png");
@@ -19,7 +19,7 @@ setTimeout(() => {
 */
 
 /*
-//EXAMPLE3
+//EXAMPLE 3
 x.example3(() => {
   setTimeout(() => {
     x.saveToFile("temp/example3.png");
@@ -27,8 +27,10 @@ x.example3(() => {
 });
 */
 
-//EXAMPLE4
+/*
+//EXAMPLE 4
 x.example4();
 setTimeout(() => {
   x.saveToFile("temp/example4.png");
 }, 5000);
+*/

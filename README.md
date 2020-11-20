@@ -2,7 +2,7 @@
 
 ### Usage
 ```
-- Just open the vvg_original.html in a Browser (with canvas support)
+- Just open the web/vvg_original.html in a Browser (with canvas support)
 - A new fresh painting will be available for you
 ```
 
