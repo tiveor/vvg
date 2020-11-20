@@ -192,11 +192,12 @@ class vvg {
 
   saveToFile(fileNamePath) {
     const fs = require("fs");
-    const out = fs.createWriteStream(`${__dirname}/${fileNamePath}`);
+    const fullPath = `${process.cwd()}/${fileNamePath}`;
+    const out = fs.createWriteStream(fullPath);
     const stream = this.canvas.createPNGStream();
     stream.pipe(out);
     out.on("finish", () =>
-      console.log(`The ${fileNamePath} file was created.`)
+      console.log(`${fullPath} file was created.`)
     );
   }
 

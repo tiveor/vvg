@@ -7,14 +7,14 @@ const x = new vvg(canvas);
 /*
 //EXAMPLE 1
 x.example1();
-x.saveToFile("temp/example1.png");
+x.saveToFile("example1.png");
 */
 
 /*
 //EXAMPLE 2
 x.example2();
 setTimeout(() => {
-  x.saveToFile("temp/example2.png");
+  x.saveToFile("example2.png");
 }, 5000);
 */
 
@@ -22,15 +22,15 @@ setTimeout(() => {
 //EXAMPLE 3
 x.example3(() => {
   setTimeout(() => {
-    x.saveToFile("temp/example3.png");
+    x.saveToFile("example3.png");
   }, 5000);
 });
 */
 
-/*
+
 //EXAMPLE 4
 x.example4();
 setTimeout(() => {
-  x.saveToFile("temp/example4.png");
+  x.saveToFile("example4.png");
 }, 5000);
-*/
+
