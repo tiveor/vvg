@@ -1,7 +1,7 @@
 {
   "name": "@tiveor/vvg",
   "version": "0.1.2",
-  "description": "A Random Painter",
+  "description": "VVG a Random Painter",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

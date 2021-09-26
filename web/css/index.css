@@ -1,0 +1,15 @@
+#leaf {
+  width: 100px;
+}
+
+.container {
+  background: #212121;
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+}
+
+body {
+  padding: 0;
+  margin: 0px;
+}

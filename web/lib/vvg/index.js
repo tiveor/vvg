@@ -6,17 +6,7 @@ class vvg {
     this.height = canvas.height;
   }
 
-  drawFrame({
-    width,
-    height,
-    borderUp,
-    borderRight,
-    borderDown,
-    borderLeft,
-    color,
-    colorBorder,
-    author,
-  }) {
+  drawFrame({ width, height, borderUp, borderRight, borderDown, borderLeft, color, colorBorder, author }) {
     const frame = new Frame(
       width,
       height,
@@ -168,7 +158,7 @@ class vvg {
     });
   }
 
-  example1() {
+  bibiyiIsGud() {
     this.drawFrame({
       width: this.width,
       height: this.height,
@@ -272,7 +262,7 @@ class vvg {
     });
   }
 
-  example2() {
+  bolivianParty() {
     this.drawFrame({
       width: this.width,
       height: this.height,
@@ -309,7 +299,7 @@ class vvg {
     });
   }
 
-  example3() {
+  jacaranda() {
     this.drawFrame({
       width: this.width,
       height: this.height,
@@ -333,7 +323,7 @@ class vvg {
     this.drawGrass();
   }
 
-  example4() {
+  aviary() {
     const borderUp = 18;
     const borderDown = 63;
     const borderRight = 18;

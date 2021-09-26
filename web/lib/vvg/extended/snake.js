@@ -5,7 +5,7 @@
     Modified by: Alvaro Orellana
 */
 
-Snake = function (ctx, width, height, color, shadowColor) {
+const Snake = function (ctx, width, height, color, shadowColor) {
   this.setCanvas(ctx, width, height);
   this.x = width / 2;
   this.y = height;
@@ -39,6 +39,7 @@ Snake.prototype = {
 
   draw: function (canvas) {
     this.context = canvas.getContext("2d");
+    let context = this.context;
     context.save();
     context.fillStyle = this.fillStyle;
     context.shadowColor = this.shadowColor;

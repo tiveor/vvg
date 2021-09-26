@@ -7,20 +7,19 @@ canvas.height = 768;
 
 let painter = new vvg(canvas);
 const example = Randomizer.randomInt(1, 5);
-painter.example4();
-/*switch (example) {
+switch (example) {
   case 1:
-    painter.example1();
+    painter.bibiyiIsGud();
     break;
   case 2:
-    painter.example2();
+    painter.bolivianParty();
     break;
   case 3:
-    painter.example3();
+    painter.jacaranda();
     break;
   case 4:
-    painter.example4();
+    painter.aviary();
     break;
   default:
-    painter.example3();
-}*/
+    painter.aviary();
+}
