@@ -12,7 +12,7 @@ Same word, same painting, on every machine, forever.
 [![dependencies](https://img.shields.io/badge/dependencies-0-2a9d8f)](package.json)
 [![license](https://img.shields.io/npm/l/@tiveor/vvg?color=e9c46a)](LICENSE)
 
-[**Try it in your browser**](https://tiveor.github.io/vvg) · [Use it from the terminal](#from-the-terminal) · [Use it in code](#in-your-code)
+[**Try it in your browser**](https://alvarotech.dev/vvg) · [Use it from the terminal](#from-the-terminal) · [Use it in code](#in-your-code)
 
 ![Eight paintings made by vvg: flow, jacaranda, bauhaus, horizon, waves, mondrian, blobs and chaos](docs/hero.jpg)
 

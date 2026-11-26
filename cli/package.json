@@ -1,6 +1,6 @@
 {
   "name": "@tiveor/vvg-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Every word is a painting, from your terminal: npx @tiveor/vvg-cli \"your name\" saves your-name.png.",
   "type": "module",
   "bin": {
@@ -28,7 +28,7 @@
     "url": "git+https://github.com/tiveor/vvg.git",
     "directory": "cli"
   },
-  "homepage": "https://tiveor.github.io/vvg",
+  "homepage": "https://alvarotech.dev/vvg",
   "bugs": "https://github.com/tiveor/vvg/issues",
   "author": "Alvaro Orellana",
   "license": "MIT"
