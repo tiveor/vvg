@@ -16,13 +16,13 @@ git pull --rebase --autostash --quiet
 
 cd "$ROOT"
 pnpm build >/dev/null
-for f in index.html vvg.js og.jpg; do [ -f "web/$f" ] || fail "web/$f is missing"; done
+for f in index.html app.js redirect.js vvg.js og.jpg; do [ -f "web/$f" ] || fail "web/$f is missing"; done
 SHA="$(git rev-parse --short HEAD)"
 [ -z "$(git status --porcelain --untracked-files=no)" ] || SHA="$SHA-dirty"
 
 rm -rf "$SITE_DIR/public/vvg"
 mkdir -p "$SITE_DIR/public/vvg"
-cp web/index.html web/vvg.js web/og.jpg "$SITE_DIR/public/vvg/"
+cp web/index.html web/app.js web/redirect.js web/vvg.js web/og.jpg "$SITE_DIR/public/vvg/"
 
 cd "$SITE_DIR"
 git add -A -- public/vvg

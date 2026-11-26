@@ -4,7 +4,11 @@ import type { Gradient, Op, Paint, PathCommand, Shape } from "../types.js";
 const n = (v: number): string => String(Math.round(v * 100) / 100);
 
 const escapeXml = (s: string): string =>
-  s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c]!);
+  String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c]!);
+
+// Every string that reaches an attribute is escaped: colors and other paint values
+// can come from user-defined palettes and styles, so they are untrusted input.
+const attr = escapeXml;
 
 export function pathData(d: PathCommand[]): string {
   return d.map(([cmd, ...args]) => cmd + args.map(n).join(" ")).join("");
@@ -38,7 +42,7 @@ function shapeElement(shape: Shape, attrs: string): string {
     case "text": {
       return (
         `<text x="${n(shape.x)}" y="${n(shape.y)}" font-size="${n(shape.size)}" ` +
-        `font-family="${escapeXml(shape.font)}" text-anchor="${shape.align}"${attrs}>${escapeXml(shape.text)}</text>`
+        `font-family="${escapeXml(shape.font)}" text-anchor="${attr(shape.align)}"${attrs}>${escapeXml(shape.text)}</text>`
       );
     }
   }
@@ -47,19 +51,19 @@ function shapeElement(shape: Shape, attrs: string): string {
 function paintAttrs(paint: Paint, gradientId: (g: Gradient) => string): string {
   let out = "";
   const fill = paint.fill;
-  out += ` fill="${fill === undefined ? "none" : typeof fill === "string" ? fill : `url(#${gradientId(fill)})`}"`;
+  out += ` fill="${fill === undefined ? "none" : typeof fill === "string" ? attr(fill) : `url(#${gradientId(fill)})`}"`;
   if (paint.stroke) {
-    out += ` stroke="${paint.stroke}" stroke-width="${n(paint.width ?? 1)}"`;
-    if (paint.cap) out += ` stroke-linecap="${paint.cap}"`;
-    if (paint.join) out += ` stroke-linejoin="${paint.join}"`;
+    out += ` stroke="${attr(paint.stroke)}" stroke-width="${n(paint.width ?? 1)}"`;
+    if (paint.cap) out += ` stroke-linecap="${attr(paint.cap)}"`;
+    if (paint.join) out += ` stroke-linejoin="${attr(paint.join)}"`;
   }
   if (paint.alpha !== undefined && paint.alpha < 1) out += ` opacity="${n(paint.alpha)}"`;
-  if (paint.blend && paint.blend !== "normal") out += ` style="mix-blend-mode:${paint.blend}"`;
+  if (paint.blend && paint.blend !== "normal") out += ` style="mix-blend-mode:${attr(paint.blend)}"`;
   return out;
 }
 
 function gradientElement(g: Gradient, id: string): string {
-  const stops = g.stops.map(([o, c]) => `<stop offset="${n(o)}" stop-color="${c}"/>`).join("");
+  const stops = g.stops.map(([o, c]) => `<stop offset="${n(o)}" stop-color="${attr(c)}"/>`).join("");
   return g.type === "linear"
     ? `<linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${n(g.x1)}" y1="${n(g.y1)}" x2="${n(g.x2)}" y2="${n(g.y2)}">${stops}</linearGradient>`
     : `<radialGradient id="${id}" gradientUnits="userSpaceOnUse" cx="${n(g.x)}" cy="${n(g.y)}" r="${n(g.r)}">${stops}</radialGradient>`;
@@ -93,7 +97,7 @@ export function renderSvg(ops: Op[], options: SvgOptions): string {
   if (grain > 0) {
     defs.push(
       `<filter id="grain" x="0" y="0" width="100%" height="100%">` +
-        `<feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="${options.seed % 10000}" stitchTiles="stitch"/>` +
+        `<feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="${n(Math.abs(options.seed) % 10000)}" stitchTiles="stitch"/>` +
         `<feColorMatrix type="saturate" values="0"/></filter>`,
     );
     grainLayer = `\n<rect width="100%" height="100%" filter="url(#grain)" opacity="${n(grain)}" style="mix-blend-mode:multiply"/>`;
@@ -101,7 +105,7 @@ export function renderSvg(ops: Op[], options: SvgOptions): string {
 
   const title = options.title ? `<title>${escapeXml(options.title)}</title>` : "";
   return (
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">` +
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${n(width)}" height="${n(height)}" viewBox="0 0 ${n(width)} ${n(height)}">` +
     title +
     (defs.length ? `<defs>${defs.join("")}</defs>` : "") +
     `\n${body}${grainLayer}\n</svg>\n`

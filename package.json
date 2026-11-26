@@ -1,6 +1,6 @@
 {
   "name": "@tiveor/vvg",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Every word is a painting. Seeded generative art for the browser, Node and the command line — zero dependencies, SVG or PNG.",
   "type": "module",
   "main": "dist/index.cjs",

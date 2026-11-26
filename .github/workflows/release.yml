@@ -1,0 +1,57 @@
+name: Release
+
+# Publishing a GitHub release (tag vX.Y.Z) publishes both packages to npm.
+# npm trusts this workflow through OIDC (trusted publishing): no npm token is
+# stored anywhere, and each version gets a provenance statement that links it
+# to the commit and the run that built it.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: The tag matches both package versions
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          lib="v$(node -p 'require("./package.json").version')"
+          cli="v$(node -p 'require("./cli/package.json").version')"
+          echo "tag $TAG, @tiveor/vvg $lib, @tiveor/vvg-cli $cli"
+          [ "$TAG" = "$lib" ] && [ "$TAG" = "$cli" ]
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+      # Trusted publishing needs npm 11.5.1 or newer.
+      - name: npm version
+        run: npm --version && npx -y semver -r '>=11.5.1' "$(npm --version)"
+
+      - name: Publish @tiveor/vvg
+        run: npm publish --access public
+      - name: Publish @tiveor/vvg-cli
+        run: npm publish ./cli --access public

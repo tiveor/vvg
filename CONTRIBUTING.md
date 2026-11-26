@@ -46,3 +46,10 @@ Add a line to `src/palettes.ts` with a `background`, a dark `ink` and 3–8 `col
 ## Commits
 
 [Conventional Commits](https://www.conventionalcommits.org): `feat(styles): add confetti`, `fix(cli): …`.
+
+## Releasing (maintainers)
+
+1. In a PR, bump `version` in `package.json` (the build copies it to `cli/package.json`) and add the entry to `CHANGELOG.md`.
+2. After merging: `gh release create vX.Y.Z --target master --notes-file <notes>`.
+3. The Release workflow publishes `@tiveor/vvg` and `@tiveor/vvg-cli` to npm with provenance, through trusted publishing. No npm token is involved.
+4. `pnpm publish:site` updates the playground at alvarotech.dev/vvg.

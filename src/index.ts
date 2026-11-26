@@ -47,6 +47,8 @@ export interface Painting {
 
 const DEFAULT_WIDTH = 1600;
 const DEFAULT_HEIGHT = 1000;
+/** Largest side, in pixels: the limit of canvas in most browsers. */
+export const MAX_SIDE = 16384;
 
 /** A short, readable random seed, e.g. "k3f9qa". */
 export function randomSeed(): string {
@@ -59,6 +61,10 @@ export function paint(options: PaintOptions = {}): Painting {
   const width = Math.round(options.width ?? DEFAULT_WIDTH);
   const height = Math.round(options.height ?? DEFAULT_HEIGHT);
   if (!(width > 0 && height > 0)) throw new Error("vvg: width and height must be positive");
+  // Bounds memory and time when sizes come from user input (a query string, a form).
+  if (width > MAX_SIDE || height > MAX_SIDE) {
+    throw new Error(`vvg: width and height can be at most ${MAX_SIDE}px`);
+  }
 
   const rng = createRandom(seed);
   const style =
