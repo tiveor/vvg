@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping. The most valuable contribution is a **new style**: one file, a few dozen lines, and everyone who runs `npx @tiveor/vvg` can paint with it.
+Thanks for helping. The most valuable contribution is a **new style**: one file, a few dozen lines, and everyone who runs `npx @tiveor/vvg-cli` can paint with it.
 
 ## Setup
 

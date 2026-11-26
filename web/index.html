@@ -280,7 +280,7 @@
       }
 
       function command() {
-        const parts = [`npx @tiveor/vvg ${JSON.stringify(art.seed)}`, `-s ${art.style}`, `-p ${art.palette}`];
+        const parts = [`npx @tiveor/vvg-cli ${JSON.stringify(art.seed)}`, `-s ${art.style}`, `-p ${art.palette}`];
         if (state.size === "wallpaper") parts.push("-z wallpaper");
         else if (state.size === "phone") parts.push("-z phone");
         else if (state.size === "square") parts.push("-z square");

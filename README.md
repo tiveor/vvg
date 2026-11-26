@@ -21,17 +21,17 @@ Same word, same painting, on every machine, forever.
 ## From the terminal
 
 ```bash
-npx @tiveor/vvg "your name"
+npx @tiveor/vvg-cli "your name"
 ```
 
 That's it: `your-name.png` is your painting. Some more:
 
 ```bash
-npx @tiveor/vvg tiveor --style flow --size wallpaper    # a 2560×1440 desktop wallpaper
-npx @tiveor/vvg "Ada Lovelace" --size phone --palette neon
-npx @tiveor/vvg --size og -o cover.svg                 # social card, as SVG
-npx @tiveor/vvg sunday -n 6 --frame --sign "Me, 2026"  # six framed, signed variations
-npx @tiveor/vvg --list                                 # every style, palette and size
+npx @tiveor/vvg-cli tiveor --style flow --size wallpaper    # a 2560×1440 desktop wallpaper
+npx @tiveor/vvg-cli "Ada Lovelace" --size phone --palette neon
+npx @tiveor/vvg-cli --size og -o cover.svg                 # social card, as SVG
+npx @tiveor/vvg-cli sunday -n 6 --frame --sign "Me, 2026"  # six framed, signed variations
+npx @tiveor/vvg-cli --list                                 # every style, palette and size
 ```
 
 | Option | |
@@ -44,7 +44,7 @@ npx @tiveor/vvg --list                                 # every style, palette an
 | `-g, --grain` | paper grain from `0` to `1` |
 | `-f, --frame`, `--sign` | gallery mat and a signature |
 
-PNG output uses [`canvas`](https://github.com/Automattic/node-canvas) when it's installed. Without it, vvg writes SVG.
+`@tiveor/vvg-cli` brings [`canvas`](https://github.com/Automattic/node-canvas) along, so you always get a PNG. If you already have the library, its own `vvg` command does the same when `canvas` is installed, and writes SVG otherwise.
 
 ## In your code
 
@@ -107,7 +107,7 @@ writeFileSync("hello.png", canvas.toBuffer("image/png"));
 
 - **Default avatars** that look like art: `paint({ seed: user.id, width: 256, height: 256 }).svg()`.
 - **Cover images** for blog posts, seeded by the slug, so each post keeps its picture.
-- **A new wallpaper every day**: `npx @tiveor/vvg "$(date +%F)" -z wallpaper`.
+- **A new wallpaper every day**: `npx @tiveor/vvg-cli "$(date +%F)" -z wallpaper`.
 - **Placeholders** that are nicer than grey boxes.
 - **Gifts**: print someone's name as an A4 painting, framed and signed (`-z a4 -f --sign`).
 

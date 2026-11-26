@@ -24,3 +24,9 @@ jobs:
       - run: pnpm build
       - name: CLI smoke test
         run: node dist/cli.js "ci" -o ci.svg && node dist/cli.js "ci" -o ci.png
+      - name: PNG CLI package smoke test
+        run: |
+          tgz="$RUNNER_TEMP/$(npm pack ./cli --pack-destination "$RUNNER_TEMP" | tail -1)"
+          mkdir "$RUNNER_TEMP/try" && cd "$RUNNER_TEMP/try"
+          npx -y --package="$tgz" vvg-cli "ci" -z avatar
+          test -s ci.png

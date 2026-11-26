@@ -1,6 +1,6 @@
 {
   "name": "@tiveor/vvg",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Every word is a painting. Seeded generative art for the browser, Node and the command line — zero dependencies, SVG or PNG.",
   "type": "module",
   "main": "dist/index.cjs",
@@ -31,13 +31,14 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsup && node scripts/copy-web.mjs",
+    "build": "tsup && node scripts/copy-web.mjs && node scripts/build-cli.mjs",
     "dev": "tsup --watch",
     "web": "pnpm build && node scripts/serve.mjs",
     "gallery": "pnpm build && node scripts/gallery.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build"
+    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build",
+    "publish:all": "pnpm publish --access public && npm publish ./cli --access public"
   },
   "keywords": [
     "generative-art",
