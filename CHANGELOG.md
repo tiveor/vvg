@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1] - 2026-11-26
+
+### Added
+- `@tiveor/vvg-cli`: the same command with `canvas` included, so `npx @tiveor/vvg-cli "your name"` always writes a PNG. With 1.0.0, `npx @tiveor/vvg` fell back to SVG unless `canvas` was already installed.
+
+### Changed
+- Without `canvas`, the `vvg` command now points to `@tiveor/vvg-cli` for PNG output.
+
 ## [1.0.0] - 2026-11-26
 
 vvg becomes "every word is a painting": seeded, reproducible paintings from any text.

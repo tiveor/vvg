@@ -113,11 +113,11 @@ async function main(): Promise<void> {
   const wantsSvg = values.out?.toLowerCase().endsWith(".svg");
   const canvasLib = wantsSvg ? null : await loadCanvas();
   if (!wantsSvg && !canvasLib && values.out) {
-    throw new Error("PNG output needs node-canvas: run `npm i canvas` (or ask for an .svg)");
+    throw new Error("PNG output needs node-canvas: use `npx @tiveor/vvg-cli`, run `npm i canvas`, or ask for an .svg");
   }
   const ext = canvasLib ? "png" : "svg";
   if (!canvasLib && !values.out) {
-    console.log("  tip: install `canvas` for PNG output — writing SVG for now\n");
+    console.log("  tip: for PNG, run `npx @tiveor/vvg-cli` instead (or `npm i canvas`). Writing SVG for now.\n");
   }
 
   for (let i = 1; i <= count; i++) {
