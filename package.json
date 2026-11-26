@@ -1,11 +1,13 @@
 {
   "name": "@tiveor/vvg",
-  "version": "0.2.0",
-  "description": "A Random Painter - Generative art library using Canvas API",
+  "version": "1.0.0",
+  "description": "Every word is a painting. Seeded generative art for the browser, Node and the command line — zero dependencies, SVG or PNG.",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "unpkg": "dist/index.global.js",
+  "jsdelivr": "dist/index.global.js",
   "exports": {
     ".": {
       "import": {
@@ -16,16 +18,44 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
-    }
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "vvg": "dist/cli.js"
   },
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "node test.js"
+  "engines": {
+    "node": ">=20"
   },
+  "scripts": {
+    "build": "tsup && node scripts/copy-web.mjs",
+    "dev": "tsup --watch",
+    "web": "pnpm build && node scripts/serve.mjs",
+    "gallery": "pnpm build && node scripts/gallery.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build"
+  },
+  "keywords": [
+    "generative-art",
+    "generative",
+    "art",
+    "procedural",
+    "seed",
+    "seeded",
+    "svg",
+    "canvas",
+    "wallpaper",
+    "avatar",
+    "identicon",
+    "flow-field",
+    "bauhaus",
+    "creative-coding",
+    "cli"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tiveor/vvg.git"
@@ -35,13 +65,21 @@
   "bugs": {
     "url": "https://github.com/tiveor/vvg/issues"
   },
-  "homepage": "https://github.com/tiveor/vvg#readme",
-  "dependencies": {
-    "canvas": "^3.2.1"
+  "homepage": "https://tiveor.github.io/vvg",
+  "peerDependencies": {
+    "canvas": "^2.11.0 || ^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "canvas": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^25.3.0",
+    "canvas": "^3.2.1",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
-  }
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.0"
+  },
+  "packageManager": "pnpm@12.4.1"
 }
