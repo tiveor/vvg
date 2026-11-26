@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.0.0] - 2026-11-26
+
+vvg becomes "every word is a painting": seeded, reproducible paintings from any text.
+
+### Added
+- `paint({ seed, style, palette, width, height, grain, frame, signature })`: same seed, same painting, everywhere.
+- Zero-dependency SVG output (`art.svg()`) next to canvas rendering (`art.draw(ctx)`).
+- Eight styles: `flow`, `bauhaus`, `jacaranda`, `horizon`, `chaos`, `mondrian`, `blobs`, `waves`.
+- 17 curated palettes, including the original `bolivia`, `whipala`, `faber`, `earth` and `vivid`.
+- CLI: `npx @tiveor/vvg "your name"` with size presets (wallpaper, 4k, phone, og, avatar, a4…), batches, frame and signature.
+- Playground (`web/`) that paints as you type, with shareable links and PNG/SVG downloads.
+- `defineStyle` / `definePalette` and a `Painter` API for custom styles; seeded `createRandom` and `createNoise`.
+- Paper grain, gallery mat and signature finishes.
+- Test suite (determinism and every style × palette), CI and a GitHub Pages workflow.
+
+### Changed
+- **BREAKING:** the 0.x drawing API (`new VVG(canvas)`, `drawDot`, `drawFrame`, `example1`–`example4`, `Randomizer`, `Colorizer`, `PaletteType`) is replaced by `paint()` and the `Painter` passed to styles. The `jacaranda` and `chaos` styles carry on the old examples.
+- `canvas` is now an optional peer dependency, only needed for PNG output in Node.
+- Node 20 or newer.
+
+### Migrating from 0.x
+
+```js
+// 0.x
+const painter = new VVG(canvas);
+example4(painter);
+
+// 1.0
+paint({ style: "chaos", width: canvas.width, height: canvas.height }).draw(canvas.getContext("2d"));
+```
+
 ## [0.2.0] - 2026-02-19
 
 ### Complete Refactoring to TypeScript

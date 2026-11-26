@@ -1,2 +1,9 @@
 node_modules
 dist
+coverage
+# Built copy of the library for the playground (pnpm build).
+web/vvg.js
+# Local paintings made while trying the CLI.
+/*.png
+/*.svg
+.DS_Store

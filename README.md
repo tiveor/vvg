@@ -1,168 +1,165 @@
-# VVG - A Random Painter
+<div align="center">
 
-Generative art library that creates abstract paintings using the Canvas API. Works in Node.js and the browser.
+# vvg
 
-![VVG demo](examples/vvg_demo.png)
+**Every word is a painting.**
 
-## Installation
+Type any word and vvg paints a one-of-a-kind artwork from it.<br>
+Same word, same painting, on every machine, forever.
+
+[![npm](https://img.shields.io/npm/v/@tiveor/vvg?color=e63946&label=npm)](https://www.npmjs.com/package/@tiveor/vvg)
+[![size](https://img.shields.io/badge/gzip-10%20kB-1d3557)](https://bundlephobia.com/package/@tiveor/vvg)
+[![dependencies](https://img.shields.io/badge/dependencies-0-2a9d8f)](package.json)
+[![license](https://img.shields.io/npm/l/@tiveor/vvg?color=e9c46a)](LICENSE)
+
+[**Try it in your browser**](https://tiveor.github.io/vvg) · [Use it from the terminal](#from-the-terminal) · [Use it in code](#in-your-code)
+
+![Eight paintings made by vvg: flow, jacaranda, bauhaus, horizon, waves, mondrian, blobs and chaos](docs/hero.jpg)
+
+</div>
+
+## From the terminal
 
 ```bash
-npm install @tiveor/vvg
+npx @tiveor/vvg "your name"
 ```
 
-Node.js requires the [`canvas`](https://github.com/Automattic/node-canvas) package as a dependency.
+That's it: `your-name.png` is your painting. Some more:
 
-## Quick Start
-
-### Node.js
-
-```typescript
-import { VVG, example4 } from "@tiveor/vvg";
-import { createCanvas } from "canvas";
-
-const canvas = createCanvas(1024, 768);
-const painter = new VVG(canvas);
-
-// Use a built-in example
-example4(painter);
-
-// Save to file
-await painter.saveToFile("painting.png");
+```bash
+npx @tiveor/vvg tiveor --style flow --size wallpaper    # a 2560×1440 desktop wallpaper
+npx @tiveor/vvg "Ada Lovelace" --size phone --palette neon
+npx @tiveor/vvg --size og -o cover.svg                 # social card, as SVG
+npx @tiveor/vvg sunday -n 6 --frame --sign "Me, 2026"  # six framed, signed variations
+npx @tiveor/vvg --list                                 # every style, palette and size
 ```
 
-### Browser
+| Option | |
+|---|---|
+| `-s, --style` | `flow` `bauhaus` `jacaranda` `horizon` `chaos` `mondrian` `blobs` `waves` |
+| `-p, --palette` | 17 curated palettes, see `--list` |
+| `-z, --size` | `WxH` or `wallpaper` `4k` `phone` `square` `og` `banner` `avatar` `a4` |
+| `-o, --out` | `.png` or `.svg` |
+| `-n, --count` | paint several variations |
+| `-g, --grain` | paper grain from `0` to `1` |
+| `-f, --frame`, `--sign` | gallery mat and a signature |
 
-```html
-<canvas id="painting" width="1024" height="768"></canvas>
-<script src="dist/index.global.js"></script>
-<script>
-  const canvas = document.getElementById("painting");
-  const painter = new VVG.VVG(canvas);
-  VVG.example4(painter);
-</script>
+PNG output uses [`canvas`](https://github.com/Automattic/node-canvas) when it's installed. Without it, vvg writes SVG.
+
+## In your code
+
+```bash
+npm i @tiveor/vvg
 ```
 
-### ES Module in Browser
+```js
+import { paint } from "@tiveor/vvg";
 
-```html
-<canvas id="painting" width="1024" height="768"></canvas>
-<script type="module">
-  import { VVG, example4 } from "./dist/index.js";
+const art = paint({ seed: "Ada Lovelace" });
 
-  const canvas = document.getElementById("painting");
-  const painter = new VVG(canvas);
-  example4(painter);
-</script>
+art.svg();       // a standalone SVG string: works in Node, the browser, edge functions
+art.draw(ctx);   // or paint onto any 2D canvas context
+art.style;       // "blobs": the seed picked it
+art.palette;     // "whipala"
 ```
 
-## API
+Everything is optional:
 
-### Drawing Methods
-
-All drawing methods receive a typed options object:
-
-```typescript
-const painter = new VVG(canvas);
-
-// Frame with borders and author label
-painter.drawFrame({ width, height, borderUp, borderRight, borderDown, borderLeft, color, colorBorder, author? });
-
-// Basic shapes
-painter.drawDot({ x, y, size, color });
-painter.drawLine({ points: [from, to], width, color });
-painter.drawEllipse({ x, y, size, color });
-painter.drawPolygon({ points: [...], color });
-painter.drawQuadrilateral({ points: [p1, p2, p3, p4], color });
-painter.drawBezier({ points: [start, cp1, cp2, end], color });
-
-// Extended shapes
-painter.drawStar({ cx, cy, spikes, outerRadius, innerRadius, color });
-painter.drawLabel({ x, y, text, font, color });
-painter.drawBackground({ p1, p2, p3, p4, limit, type: BackgroundType.HORIZONTAL, color });
-painter.drawImage({ x, y, width, height, src });
-
-// Animated tree (async)
-painter.drawTree({ trunks, width, height, color, shadowColor }, onFinished);
-painter.drawGrass();
-
-// Save to PNG (Node.js only)
-await painter.saveToFile("output.png");
-```
-
-### Utilities
-
-```typescript
-import { Randomizer, generate, Colorizer, PaletteType } from "@tiveor/vvg";
-
-// Random numbers
-Randomizer.random(0, 100);       // float between 0-100
-Randomizer.randomInt(1, 10);     // integer between 1-10
-Randomizer.randomBool();         // true or false
-
-// Bounded randomizer
-const r = new Randomizer(minX, minY, maxX, maxY);
-r.randInsideX();                 // random X within bounds
-r.randInsideY();                 // random Y within bounds
-
-// Color palettes
-const c = new Colorizer(PaletteType.PALETTE_BOLIVIA);
-c.rand();                        // random color from palette
-Colorizer.randColor();           // random RGB color
-Colorizer.randColorAlpha();      // random RGBA color
-
-// Repeat execution
-generate(10, 50, () => {         // execute 10-50 times
-  painter.drawDot({ ... });
+```js
+paint({
+  seed: "Ada Lovelace",   // any text or number; random if omitted
+  style: "flow",          // picked by the seed if omitted
+  palette: "ocean",       // picked by the seed if omitted
+  width: 1600,
+  height: 1000,
+  grain: 0.12,            // paper texture, 0 turns it off
+  frame: true,            // gallery mat
+  signature: "Ada, 1843",
 });
 ```
 
-### Available Palettes
+Changing only the palette keeps the composition, so you can recolor a painting without losing it.
 
-| Palette | Description |
-|---------|-------------|
-| `PALETTE_1` | Earthy tones |
-| `PALETTE_2` | Vivid colors |
-| `PALETTE_FABER` | Faber-Castell artist colors |
-| `PALETTE_BOLIVIA` | Bolivian flag colors |
-| `PALETTE_WHIPALA` | Whipala indigenous flag colors |
+### In the browser, no build step
 
-### Built-in Examples
-
-| Function | Name | Description |
-|----------|------|-------------|
-| `example1(vvg)` | Free Drawing | Showcase of all shape types |
-| `example2(vvg)` | Bolivian Party | Ellipses and stars with Bolivian palette |
-| `example3(vvg, callback)` | Jacaranda | Animated tree with leaves (async) |
-| `example4(vvg)` | Aviary | Complex composition with all shapes |
-
-## Development
-
-```bash
-npm run build    # Build ESM + CJS + IIFE + types
-npm run dev      # Watch mode
-npm test         # Generate example painting
+```html
+<canvas id="art" width="1600" height="1000"></canvas>
+<script type="module">
+  import { paint } from "https://esm.sh/@tiveor/vvg";
+  paint({ seed: location.hostname }).draw(document.getElementById("art").getContext("2d"));
+</script>
 ```
 
-## Project Structure
+### In Node, as PNG
 
+```js
+import { createCanvas } from "canvas";
+import { writeFileSync } from "node:fs";
+import { paint } from "@tiveor/vvg";
+
+const art = paint({ seed: "hello", width: 1920, height: 1080 });
+const canvas = createCanvas(art.width, art.height);
+art.draw(canvas.getContext("2d"));
+writeFileSync("hello.png", canvas.toBuffer("image/png"));
 ```
-src/
-├── index.ts              # Main VVG class + re-exports
-├── types.ts              # TypeScript interfaces
-├── shapes/               # Basic shapes (Dot, Line, Ellipse, Polygon, etc.)
-├── extended/             # Complex shapes (Frame, Star, Tree, Snake, etc.)
-├── utils/                # Randomizer, Colorizer, Palettes
-└── examples/             # Built-in example compositions
+
+## Ideas
+
+- **Default avatars** that look like art: `paint({ seed: user.id, width: 256, height: 256 }).svg()`.
+- **Cover images** for blog posts, seeded by the slug, so each post keeps its picture.
+- **A new wallpaper every day**: `npx @tiveor/vvg "$(date +%F)" -z wallpaper`.
+- **Placeholders** that are nicer than grey boxes.
+- **Gifts**: print someone's name as an A4 painting, framed and signed (`-z a4 -f --sign`).
+
+## Styles
+
+| | | |
+|---|---|---|
+| ![flow](docs/styles/flow.jpg) **flow**: lines that follow an invisible current and never cross | ![jacaranda](docs/styles/jacaranda.jpg) **jacaranda**: a tree in full bloom, grown branch by branch | ![bauhaus](docs/styles/bauhaus.jpg) **bauhaus**: quarter circles, half moons and triangles |
+| ![horizon](docs/styles/horizon.jpg) **horizon**: mountains fading into the distance under a low sun | ![waves](docs/styles/waves.jpg) **waves**: undulating bands of color, op-art style | ![mondrian](docs/styles/mondrian.jpg) **mondrian**: recursive blocks and a few bold colors |
+| ![blobs](docs/styles/blobs.jpg) **blobs**: organic paper cut-outs, after Matisse | ![chaos](docs/styles/chaos.jpg) **chaos**: a storm of shards, the original vvg | |
+
+## Make your own style
+
+A style is a function that draws with a seeded `Painter`. Use `p.rng` for every random choice and the result stays reproducible.
+
+```js
+import { defineStyle, paint } from "@tiveor/vvg";
+
+defineStyle({
+  name: "confetti",
+  description: "Dots, lots of them",
+  draw(p) {
+    p.background();
+    for (let i = 0; i < 400; i++) {
+      p.circle(p.rng.float(0, p.width), p.rng.float(0, p.height), p.rng.float(2, p.unit / 30), {
+        fill: p.color(),
+        alpha: p.rng.float(0.6, 1),
+      });
+    }
+  },
+});
+
+paint({ seed: "party", style: "confetti" }).svg();
 ```
+
+`Painter` gives you `rect`, `circle`, `ellipse`, `wedge`, `polygon`, `line`, `curve` (smooth, through points), `star`, `path` and `text`. It also has `rng` (`float`, `int`, `chance`, `pick`, `gauss`, `shuffle`), 2D simplex `noise`, the current `palette`, `color()` and `unit` (the short side, so styles scale). Add palettes with `definePalette({ name, background, ink, colors })`.
+
+New styles are the best contribution you can make: see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## How it works
+
+The seed is hashed (cyrb53) into a small fast generator (mulberry32). The style draws into a flat list of shapes: rectangles, circles, wedges and Bézier paths. That list is rendered to SVG or to a canvas, so both outputs show the same painting. The playground animates the painting by drawing that list a little at a time.
 
 ## Inspiration
 
-![Marc Quinn - Pool Party](examples/marcquinn_pp.jpg)
-**Marc Quinn** - [Chaos Paintings](http://marcquinn.com/artworks/chaos-paintings)
+vvg began in 2019 as a random painter inspired by Marc Quinn's [Chaos Paintings](http://marcquinn.com/artworks/chaos-paintings) and Bert Ernie's [The Most Beautiful Man That Ever Lived](https://berternie.com). The `jacaranda` tree grows with a branching algorithm adapted from [Kenneth Jorgensen's canvas trees](http://kennethjorgensen.com/blog/2014/canvas-trees).
 
-![Bert Ernie - TMBMTEL](examples/berternie_tmbmtel.jpg)
-**Bert Ernie** - [The Most Beautiful Man That Ever Lived](https://berternie.com)
+<p>
+  <img src="examples/marcquinn_pp.jpg" alt="Marc Quinn, Pool Party" width="49%">
+  <img src="examples/berternie_tmbmtel.jpg" alt="Bert Ernie, The Most Beautiful Man That Ever Lived" width="49%">
+</p>
 
 ## License
 
-MIT - Alvaro Orellana
+MIT © Alvaro Orellana. The paintings you make are yours.
