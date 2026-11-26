@@ -120,7 +120,9 @@ describe("canvas", () => {
       return canvas.toBuffer("image/png") as Buffer;
     };
     expect(render().equals(render())).toBe(true);
-  });
+    // The first load of the native canvas binary after an install can take several
+    // seconds (macOS scans new binaries), more than the default 5 s timeout.
+  }, 30_000);
 });
 
 describe("color", () => {
