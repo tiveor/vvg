@@ -8,6 +8,10 @@ Please report it privately through [GitHub's private vulnerability reporting](ht
 
 Only the latest release of `@tiveor/vvg` and `@tiveor/vvg-cli` gets security fixes.
 
+## Verifying a release
+
+Releases are published from GitHub Actions through npm trusted publishing, with provenance. `npm audit signatures` checks it, and each version's page on npmjs.com links to the commit and the workflow run that built it.
+
 ## What vvg treats as untrusted
 
 - **Seeds, signatures and titles** are escaped in SVG output.
