@@ -189,6 +189,30 @@
         .actions { justify-content: flex-start; }
         header nav a.hide-sm { display: none; }
       }
+      /* Portrait and square paintings hang with the label beside them, as in a
+         gallery: under a narrow painting the label has no room. */
+      @media (min-width: 900px) {
+        .piece.side {
+          width: auto;
+          max-width: 100%;
+          display: grid;
+          grid-template-columns: auto 440px;
+          gap: 56px;
+          align-items: end;
+        }
+        .piece.side .canvas-wrap { width: min(calc(74svh * var(--ratio)), calc(100vw - 600px)); }
+        .piece.side .label { grid-template-columns: minmax(0, 1fr); margin-top: 0; }
+        .piece.side .title { font-size: clamp(32px, 4vw, 56px); }
+        .piece.side .actions { justify-content: flex-start; gap: 6px; }
+        .piece.side .actions button { padding: 10px 14px; font-size: 14px; }
+        .piece.side .code { flex-wrap: wrap; }
+        .piece.side .code code { flex-basis: 100%; white-space: normal; overflow-wrap: anywhere; }
+      }
+      /* On narrow screens the label takes the full width under the painting. */
+      @media (max-width: 899px) {
+        .piece.side { width: 100%; }
+        .piece.side .canvas-wrap { width: min(100%, calc(68svh * var(--ratio))); margin-inline: auto; }
+      }
       @media (prefers-reduced-motion: reduce) {
         body, .title, .toast { transition: none; }
       }
@@ -307,7 +331,9 @@
         document.body.style.setProperty("--text", dark ? "#f3efe8" : pal.ink);
         $("wrap").style.setProperty("--ratio", art.width / art.height);
         // The label lines up with the painting, so size the whole piece.
-        document.querySelector(".piece").style.setProperty("--piece-w", `calc(68svh * ${art.width / art.height})`);
+        const piece = document.querySelector(".piece");
+        piece.style.setProperty("--piece-w", `calc(68svh * ${art.width / art.height})`);
+        piece.classList.toggle("side", art.width <= art.height);
 
         if (document.activeElement !== $("seed")) $("seed").value = art.seed;
         $("style").value = state.style;
