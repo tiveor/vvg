@@ -1,6 +1,6 @@
 {
   "name": "@tiveor/vvg-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Every word is a painting, from your terminal: npx @tiveor/vvg-cli \"your name\" saves your-name.png.",
   "type": "module",
   "bin": {

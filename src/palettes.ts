@@ -1,4 +1,5 @@
 import type { Palette } from "./types.js";
+import { assertName } from "./style.js";
 
 const palette = (name: string, background: string, ink: string, colors: string[]): Palette => ({
   name,
@@ -43,7 +44,7 @@ export const palettes: Record<string, Palette> = Object.fromEntries(
 export const paletteNames = (): string[] => Object.keys(palettes);
 
 export function getPalette(name: string): Palette {
-  const found = palettes[name];
+  const found = Object.prototype.hasOwnProperty.call(palettes, name) ? palettes[name] : undefined;
   if (!found) {
     throw new Error(`vvg: unknown palette "${name}". Try one of: ${paletteNames().join(", ")}`);
   }
@@ -52,7 +53,8 @@ export function getPalette(name: string): Palette {
 
 /** Registers a custom palette so it can be used by name. */
 export function definePalette(p: Palette): Palette {
-  if (!p.colors.length) throw new Error("vvg: a palette needs at least one color");
+  assertName(p.name, "palette");
+  if (!Array.isArray(p.colors) || !p.colors.length) throw new Error("vvg: a palette needs at least one color");
   palettes[p.name] = p;
   return p;
 }

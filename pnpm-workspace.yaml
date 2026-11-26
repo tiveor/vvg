@@ -1,3 +1,6 @@
 allowBuilds:
   canvas: true
   esbuild: true
+# Dev-only: esbuild < 0.28.1 has a dev-server file read on Windows (GHSA-g7r4-m6w7-qqqr).
+overrides:
+  esbuild: ">=0.28.1"

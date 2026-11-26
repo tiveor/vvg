@@ -286,12 +286,14 @@
       $("size").append(...Object.entries(SIZES).map(([k, [, , label]]) => option(k, label)));
 
       // State lives in the URL so every painting is a link.
+      // Links can be crafted, so only known names are taken from them.
       const params = new URLSearchParams(location.search);
+      const known = (table, name) => (name && Object.prototype.hasOwnProperty.call(table, name) ? name : "");
       const state = {
-        seed: params.get("s") || randomSeed(),
-        style: params.get("style") || "",
-        palette: params.get("palette") || "",
-        size: SIZES[params.get("size")] ? params.get("size") : "landscape",
+        seed: (params.get("s") || randomSeed()).slice(0, 80),
+        style: known(styles, params.get("style")),
+        palette: known(palettes, params.get("palette")),
+        size: known(SIZES, params.get("size")) || "landscape",
       };
       const history = [];
       let cursor = -1;

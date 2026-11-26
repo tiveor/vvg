@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import { createRequire } from "node:module";
 import {
   createRandom,
+  definePalette,
   defineStyle,
   getPalette,
+  getStyle,
   hash,
   mix,
   paint,
@@ -125,5 +127,31 @@ describe("color", () => {
   it("mixes hex colors", () => {
     expect(mix("#000000", "#ffffff", 0.5)).toBe("#808080");
     expect(mix("#fff", "#000", 0)).toBe("#ffffff");
+  });
+});
+
+describe("security", () => {
+  it("escapes colors from custom palettes in SVG attributes", () => {
+    const evil = '#000"/><script>alert(1)</script><rect fill="';
+    const svg = paint({
+      seed: "x",
+      style: "bauhaus",
+      palette: { name: "evil", background: evil, ink: evil, colors: [evil, evil] },
+    }).svg();
+    expect(svg).not.toContain("<script");
+    expect(svg).toContain("&lt;script&gt;");
+  });
+
+  it("refuses names that reach Object.prototype", () => {
+    expect(() => getStyle("__proto__")).toThrow(/unknown style/);
+    expect(() => getStyle("toString")).toThrow(/unknown style/);
+    expect(() => getPalette("constructor")).toThrow(/unknown palette/);
+    expect(() => definePalette({ name: "__proto__", background: "#fff", ink: "#000", colors: ["#f00"] })).toThrow(/invalid palette name/);
+    expect(() => defineStyle({ name: "constructor", description: "", draw() {} })).toThrow(/invalid style name/);
+  });
+
+  it("bounds the size of a painting", () => {
+    expect(() => paint({ width: 100_000, height: 100 })).toThrow(/at most/);
+    expect(() => paint({ width: Number.NaN, height: 100 })).toThrow(/positive/);
   });
 });

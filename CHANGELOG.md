@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3] - 2026-11-26
+
+### Security
+- SVG output escapes every attribute value, including colors from custom palettes and styles. Before, a palette built from untrusted input could inject markup into the SVG.
+- `getStyle` and `getPalette` only find own names, and `defineStyle` and `definePalette` refuse names such as `__proto__`.
+- Width and height are limited to 16384 px (`MAX_SIDE`).
+- The playground only accepts known style, palette and size names from the URL.
+
 ## [1.0.2] - 2026-11-26
 
 ### Changed
