@@ -1,6 +1,6 @@
 {
   "name": "@tiveor/vvg",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Every word is a painting. Seeded generative art for the browser, Node and the command line — zero dependencies, SVG or PNG.",
   "type": "module",
   "main": "dist/index.cjs",
@@ -38,7 +38,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build",
-    "publish:all": "pnpm publish --access public && npm publish ./cli --access public"
+    "publish:all": "pnpm publish --access public && npm publish ./cli --access public",
+    "publish:site": "scripts/publish-site.sh"
   },
   "keywords": [
     "generative-art",
@@ -66,7 +67,7 @@
   "bugs": {
     "url": "https://github.com/tiveor/vvg/issues"
   },
-  "homepage": "https://tiveor.github.io/vvg",
+  "homepage": "https://alvarotech.dev/vvg",
   "peerDependencies": {
     "canvas": "^2.11.0 || ^3.0.0"
   },

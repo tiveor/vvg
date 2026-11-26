@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.2] - 2026-11-26
+
+### Changed
+- The playground lives at https://alvarotech.dev/vvg. Old `tiveor.github.io/vvg` links redirect there.
+
 ## [1.0.1] - 2026-11-26
 
 ### Added
